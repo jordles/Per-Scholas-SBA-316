@@ -1,9 +1,24 @@
 
 const textarea = document.getElementById('chat-text-area');
-const chatInput = document.getElementById('chat-input');
+const chatInput = document.querySelector('#chat-input');
 const chatLog = document.getElementById('chat-log');
 const send = document.getElementById('send');
+
+window.name = 'Private Room 1'; 
+document.title = window.name;
+document.querySelector('#title').textContent = window.name; 
+
+
+
+//window.alert for rules
+
+// Be civil and respectful
+// Stick to the topic
+// Questions welcome
+// No self-promotion or spam
 let botTimeout; // Bot response timeout
+
+let bots = ['Julia', 'Karen', 'Dave', 'Jason']
 /* textarea.addEventListener('input', function() {
   this.style.height = 'auto'; // Reset the height to auto
   const newHeight = this.scrollHeight; // Calculate the new height
@@ -23,13 +38,15 @@ textarea.addEventListener('input', function() {
   this.style.bottom = `${bottomOffset}px`;
 });
 
-chatInput.addEventListener('submit', (e) => {
+chatInput.addEventListener('submit', submitHandler);  
+function submitHandler(e){
   e.preventDefault();
   addGroupNode('mine', textarea.value); // Add user's message
   textarea.value = '';
   textarea.style.height = 'auto'; // Reset the height to auto
-})  
-chatInput.addEventListener('keydown', (e) => {  
+}
+chatInput.addEventListener('keydown', keyDownHandler);
+function keyDownHandler(e){
   if (e.key === 'Enter' && !e.shiftKey) {
     // Prevent the default action (sending the message) if Shift is not pressed
     e.preventDefault();
@@ -55,13 +72,14 @@ chatInput.addEventListener('keydown', (e) => {
   botTimeout = setTimeout(() => {
     addGroupNode('others', "Bot response!"); // Add bot message
   }, 3000);
-})
-
+}
 function addChatNode(text){
+  const frag = document.createDocumentFragment();
   const chatNode = document.createElement('div');
   chatNode.innerText = text;
   chatNode.classList.add('message');
-  return chatNode;
+  frag.appendChild(chatNode);
+  return frag;
 }
 
 // Function to handle message creation and grouping
@@ -78,4 +96,7 @@ function addGroupNode(sender, text) {
   }
   console.log(lastMessageGroup);
   lastMessageGroup.appendChild(addChatNode(text)); // Add the chat node to the new message group
+
+  // Scroll to the bottom of the chat log after adding a new message
+  chatLog.scrollTop = chatLog.scrollHeight;
 }
