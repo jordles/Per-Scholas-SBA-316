@@ -2,7 +2,7 @@
 
 | Requirement | Weight | Finished |
 | :-- | :--: | :--: |
-| Cache at least one element using getElementById. | 5% | |
+| Cache at least one element using getElementById. | 5% | ✅ |
 | Cache at least one element using querySelector or querySelectorAll. | 5% | |
 | Use the parent-child-sibling relationship to navigate between elements at least once (firstChild, lastChild, parentNode, nextElementSibling, etc.). | 5% | |
 | Iterate over a collection of elements to accomplish some task. | 10% | |
