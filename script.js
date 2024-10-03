@@ -3,12 +3,45 @@ const textarea = document.getElementById('chat-text-area');
 const chatInput = document.querySelector('#chat-input');
 const chatLog = document.getElementById('chat-log');
 const send = document.getElementById('send');
+const signIn = document.getElementById('sign-in');
+const error = document.getElementById('error-display');
 
 window.name = 'Private Room 1'; 
 document.title = window.name;
 document.querySelector('#title').textContent = window.name; 
 
+signIn.addEventListener('submit', validate);
 
+function validate(e){
+  e.preventDefault();
+  const name = document.querySelector('#name').value;
+  const password = document.querySelector('#password').value;
+  if(name.trim() === ''){
+    errorHandler('Name cannot be blank!');
+  }
+  else if(password.trim() === ''){
+    errorHandler('Password cannot be blank!');
+  }
+  else if(password !== 'corn304'){
+    errorHandler('Incorrect password!');
+  }
+  else{
+    this.style.display = 'none';
+    setTimeout(() => alert(`
+    Remember! When chatting in a lobby: 
+    Be civil and respectful
+    Stick to the topic
+    Questions welcome
+    No self-promotion or spam
+    `), 1000);
+  }
+}
+
+function errorHandler(err){
+  error.textContent = err;
+  error.style.display = 'block';
+  setTimeout(() => error.style.display = 'none', 2000);
+}
 
 //window.alert for rules
 
