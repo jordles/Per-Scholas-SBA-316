@@ -11,8 +11,15 @@ const users = document.getElementById('users');
 window.name = 'Private Room 1'; 
 document.title = window.name;
 document.querySelector('#title').textContent = window.name; 
-
 signIn.addEventListener('submit', validate);
+
+document.querySelector('.add').addEventListener('mouseover', () => {
+  document.querySelector('.add').setAttribute('style', 'color: red;');
+})
+document.querySelector('.add').addEventListener('mouseout', () => {
+  document.querySelector('.add').setAttribute('style', 'color: #05668d;');
+})
+
 
 function validate(e){
   e.preventDefault();
@@ -233,15 +240,16 @@ function addChatNode(text){
   const frag = document.createDocumentFragment();
   const chatNode = document.createElement('div');
   const atWordRegex = /(@\w+)(?=\s|$)/g; //match any word starting with @, and look ahead for the next space or end of string
-
+  //REGEX SEEMS TO BE CAUSING ERRORS, WILL DO LATER FOR FUTURE IMPLEMENTATIONS
   // Replace matched words with a span element
   const formattedText = text.replace(atWordRegex, function(match) {
     const span = document.createElement('span');
+    console.log(match);
     span.textContent = match;
-    span.setAttribute('style', 'font-weight: bold;'); 
+    span.setAttribute('style', 'font-weight: bolder;'); 
     return span.outerHTML;
   });
-
+  console.log(formattedText);
   chatNode.innerHTML = formattedText;
   chatNode.classList.add('message');
   chatNode.style.whiteSpace = 'pre-wrap'; // This will preserve spaces, tabs, and newlines
