@@ -227,7 +227,7 @@ function keyDownHandler(e){
 
     // Use setInterval to simulate typing multiple messages with delay
     const botMessageInterval = setInterval(sendBotMessage, 800); // Send each message with a delay of 1.5 seconds
-  }, 3000);
+  }, Math.floor(Math.random() * 3000) + 1000);
 }
 function addChatNode(text){
   const frag = document.createDocumentFragment();
