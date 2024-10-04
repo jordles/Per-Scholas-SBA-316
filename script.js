@@ -109,7 +109,7 @@ function createGroupNodeDetails(lastMessageGroup, image, name){
         child = nextChild;
       }
     });
-
+    
     lastMessageGroup.lastElementChild.appendChild(image.cloneNode(true));
     lastMessageGroup.lastElementChild.appendChild(name.cloneNode(true));
   }
@@ -150,6 +150,7 @@ textarea.addEventListener('input', function() {
 });
 
 chatInput.addEventListener('submit', submitHandler);  
+let lastBotName = ''; // Track the last bot who sent a message
 function submitHandler(e){
   e.preventDefault();
   const lastMessageGroup = addGroupNode('mine', textarea.value); // Add user's message
@@ -193,10 +194,39 @@ function keyDownHandler(e){
     randomBotImage = findBotName.previousElementSibling;
     console.log(randomBotImage);
 
-    let lastMessageGroup = addGroupNode('others', "Bot response!"); // Add bot message
+    /* let lastMessageGroup = addGroupNode('others', "Bot response!"); // Add bot message
     createGroupNodeDetails(lastMessageGroup, randomBotImage, findBotName);
     lastMessageGroup = addGroupNode('others', "Bot response!"); // Add bot message
-    createGroupNodeDetails(lastMessageGroup, randomBotImage, findBotName);
+    createGroupNodeDetails(lastMessageGroup, randomBotImage, findBotName); */
+    // If a different bot is chosen, create a new message group
+    const messageCount = Math.floor(Math.random() * 3) + 1;
+    let messageSent = 0;
+
+    // Function to send each bot message
+    const sendBotMessage = () => {
+        // If a different bot is chosen, create a new message group
+        let lastMessageGroup = chatLog.lastElementChild;
+        if (randomBotName !== lastBotName || !lastMessageGroup || !lastMessageGroup.classList.contains('others')) {
+            lastMessageGroup = addGroupNode('others', "Bot response!"); // Create new bot group
+            createGroupNodeDetails(lastMessageGroup, randomBotImage, findBotName);
+            lastBotName = randomBotName; // Update the last bot name
+        } else {
+            // Add message to the existing bot group
+            lastMessageGroup = addGroupNode('others', "Bot response!"); 
+            createGroupNodeDetails(lastMessageGroup, randomBotImage, findBotName);
+        }
+
+        // Increment the message sent counter
+        messageSent++;
+
+        // If the bot has sent all messages, clear the interval
+        if (messageSent >= messageCount) {
+            clearInterval(botMessageInterval);
+        }
+    };
+
+    // Use setInterval to simulate typing multiple messages with delay
+    const botMessageInterval = setInterval(sendBotMessage, 800); // Send each message with a delay of 1.5 seconds
   }, 3000);
 }
 function addChatNode(text){
@@ -224,12 +254,15 @@ function addGroupNode(sender, text) {
   let lastMessageGroup = chatLog.lastElementChild;
   let messageGroup; 
   // Check if the last group of messages is from the same sender
-  if (!lastMessageGroup || !lastMessageGroup.classList.contains(sender)) {
+  console.log('sender', sender)
+  console.log('randomBotName', randomBotName);
+  console.log('lastBotName', lastBotName);
+  if (!lastMessageGroup || !lastMessageGroup.classList.contains(sender) ||(sender === 'others' && randomBotName !== lastBotName)) {
+    console.log('creating our others group here...')
     messageGroup = document.createElement('div');
     messageGroup.classList.add(sender); // Add 'mine' or 'others' class
     chatLog.appendChild(messageGroup); // Append new message group
     lastMessageGroup = messageGroup;
-    
   }
   console.log(lastMessageGroup);
   lastMessageGroup.appendChild(addChatNode(text)); // Add the chat node to the new message group

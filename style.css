@@ -127,7 +127,9 @@ h2{
   background-attachment: fixed;
   position: relative;
 }
-
+.min .message:last-child, .others .message:last-child{
+  margin-bottom: 20px;
+}
 .mine .message:last-child:before {
   content: "";
   position: absolute;

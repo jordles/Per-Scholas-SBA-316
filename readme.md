@@ -1,6 +1,6 @@
 # Per Scholas SBA 316 (Chat Lobby Application)
 
-This is an application of a chat lobby. I made the design similar to iphone's messages. The color scheme is the same as my social media app (capstone). You have a form to list your name and the secret password (corn304) because my example is of a private lobby. After signing in, you are notified of the lobby rules and users can freely type and converse with others. 'Shift Enter' hotkey is for new lines. 
+This is an application of a chat lobby. I made the design similar to iphone's messages. The color scheme is the same as my social media app (capstone). You have a form to list your name and the secret password (corn304) because my example is of a private lobby. After signing in, you are notified of the lobby rules and users can freely type and converse with others. 'Shift Enter' hotkey is for new lines. The bots reply whenever you stop typing for 3 seconds. 
 
 ## Requirements/Tracking
 
@@ -25,6 +25,11 @@ This is an application of a chat lobby. I made the design similar to iphone's me
 | Include a README file that contains a description of your application. | 5% | ✅ |
 | Level of effort displayed in creativity, presentation, and user experience. | 10% | ✅ |
 
+
+## Improvements (Not done due to lack of time)
+
+* I could definitely improve my code layout better, I know its messy and not DRY. 
+* Input fields and scrollbar could match the theme color. 
 
 ## Attributions 
 
