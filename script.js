@@ -5,6 +5,8 @@ const chatLog = document.getElementById('chat-log');
 const send = document.getElementById('send');
 const signIn = document.getElementById('sign-in');
 const error = document.getElementById('error-display');
+const users = document.getElementById('users');
+const usersList = document.querySelectorAll('.user');
 
 window.name = 'Private Room 1'; 
 document.title = window.name;
@@ -27,12 +29,15 @@ function validate(e){
   }
   else{
     this.style.display = 'none';
+    users.appendChild(addUser(name));
     setTimeout(() => alert(`
     Remember! When chatting in a lobby: 
     Be civil and respectful
     Stick to the topic
     Questions welcome
     No self-promotion or spam
+
+    - The Root Team 
     `), 1000);
   }
 }
@@ -43,15 +48,29 @@ function errorHandler(err){
   setTimeout(() => error.style.display = 'none', 2000);
 }
 
-//window.alert for rules
-
-// Be civil and respectful
-// Stick to the topic
-// Questions welcome
-// No self-promotion or spam
 let botTimeout; // Bot response timeout
 
 let bots = ['Julia', 'Karen', 'Dave', 'Jason']
+let randomBotName, randomBotImage, findBotImage;
+bots.forEach(bot => users.appendChild(addUser(bot))); // Add all bots to the users list
+
+
+
+function addUser(user){
+  const frag = document.createDocumentFragment();
+  const userNode = document.createElement('div');
+  const userImage = document.createElement('img');
+  const randomSeed = Math.floor(Math.random() * 10000); // Create a random seed value
+  userImage.src = `https://avatar.iran.liara.run/public?seed=${randomSeed}`;
+
+  const userName = document.createElement('div');
+  userName.textContent = user;
+  userNode.appendChild(userImage);
+  userNode.appendChild(userName);
+  userNode.classList.add('user');
+  frag.appendChild(userNode);
+  return frag;
+}
 /* textarea.addEventListener('input', function() {
   this.style.height = 'auto'; // Reset the height to auto
   const newHeight = this.scrollHeight; // Calculate the new height
@@ -61,6 +80,30 @@ let bots = ['Julia', 'Karen', 'Dave', 'Jason']
   const offset = newHeight - this.offsetHeight;
   this.style.transform = `translateY(-${offset}px)`; // Adjust using translateY
 }); */
+
+function createGroupNodeDetails(lastMessage){
+  const userNames = document.querySelectorAll('.user > div');
+  console.log(userNames);
+
+  if(lastMessage.parentNode.classList.contains('others')){
+    randomBotName = bots[Math.floor(Math.random() * bots.length)]; // Pick a random bot
+    console.log(randomBotName);
+    findBotImage = [...userNames].find(name =>{ if(name.textContent === randomBotName) return name.previousElementSibling; });
+    console.log(findBotImage);
+    randomBotImage = findBotImage.previousElementSibling;
+    console.log(randomBotImage);
+    lastMessage.appendChild(randomBotImage.cloneNode(true));
+    lastMessage.appendChild(findBotImage.cloneNode(true));
+  }
+  else if(lastMessage.parentNode.classList.contains('mine')){
+    const users = [...usersList];
+    const user = users[users.length - 1]
+    console.log(user);
+    lastMessage.appendChild(user.querySelector('img').cloneNode(true));
+    lastMessage.appendChild(user.querySelector('div').cloneNode(true)); 
+  }
+  
+}
 
 textarea.addEventListener('input', function() {
   this.style.height = 'auto'; // Reset the height to auto
@@ -74,16 +117,19 @@ textarea.addEventListener('input', function() {
 chatInput.addEventListener('submit', submitHandler);  
 function submitHandler(e){
   e.preventDefault();
-  addGroupNode('mine', textarea.value); // Add user's message
+  const lastMessage = addGroupNode('mine', textarea.value); // Add user's message
+  createGroupNodeDetails(lastMessage);
   textarea.value = '';
   textarea.style.height = 'auto'; // Reset the height to auto
 }
 chatInput.addEventListener('keydown', keyDownHandler);
 function keyDownHandler(e){
+  
   if (e.key === 'Enter' && !e.shiftKey) {
     // Prevent the default action (sending the message) if Shift is not pressed
     e.preventDefault();
-    addGroupNode('mine', textarea.value); // Add user's message
+    const lastMessage = addGroupNode('mine', textarea.value); // Add user's message
+    createGroupNodeDetails(lastMessage);
     textarea.value = ''; // Clear the textarea after sending the message
     textarea.style.height = 'auto'; // Reset the height to auto
   } else if (e.key === 'Enter' && e.shiftKey) {
@@ -103,14 +149,26 @@ function keyDownHandler(e){
   // Reset the bot typing timeout each time the user types
   clearTimeout(botTimeout);
   botTimeout = setTimeout(() => {
-    addGroupNode('others', "Bot response!"); // Add bot message
+    const lastMessage = addGroupNode('others', "Bot response!"); // Add bot message
+    createGroupNodeDetails(lastMessage);
   }, 3000);
 }
 function addChatNode(text){
   const frag = document.createDocumentFragment();
   const chatNode = document.createElement('div');
-  chatNode.innerText = text;
+  const atWordRegex = /(@\w+)(?=\s|$)/g; //match any word starting with @, and look ahead for the next space or end of string
+
+  // Replace matched words with a span element
+  const formattedText = text.replace(atWordRegex, function(match) {
+    const span = document.createElement('span');
+    span.textContent = match;
+    span.setAttribute('style', 'font-weight: bold;'); 
+    return span.outerHTML;
+  });
+
+  chatNode.innerHTML = formattedText;
   chatNode.classList.add('message');
+  chatNode.style.whiteSpace = 'pre-wrap'; // This will preserve spaces, tabs, and newlines
   frag.appendChild(chatNode);
   return frag;
 }
@@ -132,4 +190,5 @@ function addGroupNode(sender, text) {
 
   // Scroll to the bottom of the chat log after adding a new message
   chatLog.scrollTop = chatLog.scrollHeight;
+  return lastMessageGroup.lastElementChild;
 }

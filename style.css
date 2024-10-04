@@ -26,18 +26,21 @@ h2{
 /*                              CHAT APPLICATION                              */
 /* -------------------------------------------------------------------------- */
 
+#lobby{
+  display: flex;
+  position: relative;
+}
 
 #chat{
   background: #FBFBFB;
   height: 1000px;
   width: 1000px;
   min-width: 500px;
-  border-radius: 20px;
+  border-radius: 20px 0 0 20px;
   padding: 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  position: relative;
 }
 
 #sign-in{
@@ -48,13 +51,17 @@ h2{
   top: 0;
   bottom: 0;
   left: 0;
-  background: rgba(187, 186, 186, 0.5);
-  backdrop-filter: blur(2px);
+  background: rgb(255 255 255 / 5%);
+  backdrop-filter: blur(5px);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   gap:10px;
+}
+
+#error-display{
+  color: red;
 }
 
 #chat-log{
@@ -71,6 +78,7 @@ h2{
 #chat-log > div:first-child{
   margin-top: auto;
 }
+
 .mine{
   display: flex;
   flex-direction: column;
@@ -82,7 +90,7 @@ h2{
   margin-top: 5px;
   margin-bottom: 5px;
   display: inline-block;
-  width: fit-content;
+  /* width: fit-content; */
 }
 .mine .message {
   color: white;
@@ -194,3 +202,19 @@ textarea:focus{
   object-fit: cover;
   
 } */
+
+#users{
+  padding: 10px;
+  text-align: center;
+  background: linear-gradient(to bottom, #f0f3bd 0%, #02c39a 25%, #00a896 50%, #028090 75%, #05668d 100%);
+  border-radius: 0 20px 20px 0;
+}
+
+.user{
+  margin-bottom: 10px;
+}
+
+.user img{
+  width: 50px;
+}
+

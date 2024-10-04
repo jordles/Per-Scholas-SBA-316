@@ -10,7 +10,7 @@
 </head>
 <body>
   <h2 id="title">General</h2>
-  <div id="chat">
+  <div id="lobby">
     <form id="sign-in">
       <h3>Lobby Sign In</h3>
       <input type="text" id="name" placeholder = "name" minlength="4">
@@ -18,15 +18,19 @@
       <button type="submit">Sign In</button>
       <div id="error-display" style="display:none"></div>
     </form>
-    <div id="chat-log">
+    <div id="chat">
+      
+      <div id="chat-log">
 
+      </div>
+      <form id="chat-input">
+        <div></div>
+        <span class="material-symbols-rounded add">add</span>
+        <textarea name="chat-input" id="chat-text-area" placeholder="type here..." rows="1"></textarea>
+        <button type="submit" id="send"><span class="material-symbols-rounded">eco</span></button>
+      </form>
     </div>
-    <form id="chat-input">
-      <div></div>
-      <span class="material-symbols-rounded add">add</span>
-      <textarea name="chat-input" id="chat-text-area" placeholder="type here..." rows="1"></textarea>
-      <button type="submit" id="send"><span class="material-symbols-rounded">eco</span></button>
-    </form>
+    <div id="users"></div>
   </div>
 </body>
 </html>
