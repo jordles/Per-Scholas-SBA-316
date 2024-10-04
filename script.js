@@ -6,7 +6,7 @@ const send = document.getElementById('send');
 const signIn = document.getElementById('sign-in');
 const error = document.getElementById('error-display');
 const users = document.getElementById('users');
-const usersList = document.querySelectorAll('.user');
+
 
 window.name = 'Private Room 1'; 
 document.title = window.name;
@@ -81,26 +81,61 @@ function addUser(user){
   this.style.transform = `translateY(-${offset}px)`; // Adjust using translateY
 }); */
 
-function createGroupNodeDetails(lastMessage){
-  const userNames = document.querySelectorAll('.user > div');
-  console.log(userNames);
+function createGroupNodeDetails(lastMessageGroup, image, name){
+  
 
-  if(lastMessage.parentNode.classList.contains('others')){
-    randomBotName = bots[Math.floor(Math.random() * bots.length)]; // Pick a random bot
-    console.log(randomBotName);
-    findBotImage = [...userNames].find(name =>{ if(name.textContent === randomBotName) return name.previousElementSibling; });
-    console.log(findBotImage);
-    randomBotImage = findBotImage.previousElementSibling;
-    console.log(randomBotImage);
-    lastMessage.appendChild(randomBotImage.cloneNode(true));
-    lastMessage.appendChild(findBotImage.cloneNode(true));
+  if(lastMessageGroup.classList.contains('others')){
+    
+
+    // Remove the image and name, but leave the message content
+    const messages = [...lastMessageGroup.childNodes];
+    messages.forEach((message) => {
+      /* const messageChildNodes = [...message.childNodes];
+
+      // Remove image and name from all messages **UNUSED NOT THE RIGHT LOGIC** 
+      messageChildNodes.forEach(node => {
+        if (node.tagName === 'IMG' || (node.tagName === 'DIV' && node.textContent === name)) {
+          message.removeChild(node);  // Remove image or bot name if present
+        }
+      }); */
+
+      let child = message.firstChild;
+
+      while (child) {
+        let nextChild = child.nextSibling;  // Store reference to the next sibling before possibly removing the current one
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          message.removeChild(child);
+        }
+        child = nextChild;
+      }
+    });
+
+    lastMessageGroup.lastElementChild.appendChild(image.cloneNode(true));
+    lastMessageGroup.lastElementChild.appendChild(name.cloneNode(true));
   }
-  else if(lastMessage.parentNode.classList.contains('mine')){
+  else if(lastMessageGroup.classList.contains('mine')){
+
+    // Remove the image and name, but leave the message content
+    const messages = [...lastMessageGroup.childNodes];
+    messages.forEach((message) => {
+      let child = message.firstChild;
+
+      while (child) {
+        let nextChild = child.nextSibling;  // Store reference to the next sibling before possibly removing the current one
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          message.removeChild(child);
+        }
+        child = nextChild;
+      }
+    });
+
+    const usersList = document.querySelectorAll('.user');
     const users = [...usersList];
+    console.log(users);
     const user = users[users.length - 1]
     console.log(user);
-    lastMessage.appendChild(user.querySelector('img').cloneNode(true));
-    lastMessage.appendChild(user.querySelector('div').cloneNode(true)); 
+    lastMessageGroup.lastElementChild.appendChild(user.querySelector('img').cloneNode(true));
+    lastMessageGroup.lastElementChild.appendChild(user.querySelector('div').cloneNode(true)); 
   }
   
 }
@@ -117,8 +152,8 @@ textarea.addEventListener('input', function() {
 chatInput.addEventListener('submit', submitHandler);  
 function submitHandler(e){
   e.preventDefault();
-  const lastMessage = addGroupNode('mine', textarea.value); // Add user's message
-  createGroupNodeDetails(lastMessage);
+  const lastMessageGroup = addGroupNode('mine', textarea.value); // Add user's message
+  createGroupNodeDetails(lastMessageGroup);
   textarea.value = '';
   textarea.style.height = 'auto'; // Reset the height to auto
 }
@@ -128,8 +163,8 @@ function keyDownHandler(e){
   if (e.key === 'Enter' && !e.shiftKey) {
     // Prevent the default action (sending the message) if Shift is not pressed
     e.preventDefault();
-    const lastMessage = addGroupNode('mine', textarea.value); // Add user's message
-    createGroupNodeDetails(lastMessage);
+    const lastMessageGroup = addGroupNode('mine', textarea.value); // Add user's message
+    createGroupNodeDetails(lastMessageGroup);
     textarea.value = ''; // Clear the textarea after sending the message
     textarea.style.height = 'auto'; // Reset the height to auto
   } else if (e.key === 'Enter' && e.shiftKey) {
@@ -149,8 +184,19 @@ function keyDownHandler(e){
   // Reset the bot typing timeout each time the user types
   clearTimeout(botTimeout);
   botTimeout = setTimeout(() => {
-    const lastMessage = addGroupNode('others', "Bot response!"); // Add bot message
-    createGroupNodeDetails(lastMessage);
+    const userNames = document.querySelectorAll('.user > div');
+    console.log(userNames);
+    randomBotName = bots[Math.floor(Math.random() * bots.length)]; // Pick a random bot
+    console.log(randomBotName);
+    findBotName = [...userNames].find(name =>{ if(name.textContent === randomBotName) return name.previousElementSibling; });
+    console.log(findBotName);
+    randomBotImage = findBotName.previousElementSibling;
+    console.log(randomBotImage);
+
+    let lastMessageGroup = addGroupNode('others', "Bot response!"); // Add bot message
+    createGroupNodeDetails(lastMessageGroup, randomBotImage, findBotName);
+    lastMessageGroup = addGroupNode('others', "Bot response!"); // Add bot message
+    createGroupNodeDetails(lastMessageGroup, randomBotImage, findBotName);
   }, 3000);
 }
 function addChatNode(text){
@@ -190,5 +236,5 @@ function addGroupNode(sender, text) {
 
   // Scroll to the bottom of the chat log after adding a new message
   chatLog.scrollTop = chatLog.scrollHeight;
-  return lastMessageGroup.lastElementChild;
+  return lastMessageGroup;
 }

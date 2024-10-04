@@ -78,11 +78,15 @@ h2{
 #chat-log > div:first-child{
   margin-top: auto;
 }
-
-.mine{
+.mine, .others{
   display: flex;
-  flex-direction: column;
+  flex-direction: column;  
+}
+.mine{
   align-items: flex-end;
+}
+.others{
+  align-items:flex-start;
 }
 .message {
   border-radius: 20px;
@@ -90,7 +94,32 @@ h2{
   margin-top: 5px;
   margin-bottom: 5px;
   display: inline-block;
+  display: relative;
   /* width: fit-content; */
+}
+
+.message img{
+  width: 35px;
+  position: absolute;
+}
+.message div{
+  position: absolute;
+  color: #05668d;
+  border-top: 1px #05668d solid;
+  border-bottom: 1px #05668d solid;
+  font-weight: bolder;
+  padding: 2px;
+}
+.mine .message img{
+  bottom: -16px;
+  left: -25px;
+}
+
+.mine .message div{
+  left: -75px;
+  bottom: -12px;
+  /* background: #f0f3bd; */
+
 }
 .mine .message {
   color: white;
@@ -98,6 +127,7 @@ h2{
   background-attachment: fixed;
   position: relative;
 }
+
 .mine .message:last-child:before {
   content: "";
   position: absolute;
@@ -127,6 +157,16 @@ h2{
   margin-right: 25%;
   background-color: rgb(202, 169, 125);
   position: relative;
+}
+
+.others .message img{
+  bottom: -16px;
+  right: -25px;
+}
+.others .message div{
+  right: -75px;
+  bottom: -12px;
+  /* background: #f0f3bd; */
 }
 .others .message:last-child:before{
   content: "";
