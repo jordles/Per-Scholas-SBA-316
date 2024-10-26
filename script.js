@@ -21,6 +21,7 @@ document.querySelector('.add').addEventListener('mouseout', () => {
 })
 
 
+
 function validate(e){
   e.preventDefault();
   const name = document.querySelector('#name').value;
@@ -214,12 +215,12 @@ function keyDownHandler(e){
         // If a different bot is chosen, create a new message group
         let lastMessageGroup = chatLog.lastElementChild;
         if (randomBotName !== lastBotName || !lastMessageGroup || !lastMessageGroup.classList.contains('others')) {
-            lastMessageGroup = addGroupNode('others', "Bot response!"); // Create new bot group
+            lastMessageGroup = addGroupNode('others', `Bot Message from ${randomBotName}`); // Create new bot group
             createGroupNodeDetails(lastMessageGroup, randomBotImage, findBotName);
             lastBotName = randomBotName; // Update the last bot name
         } else {
             // Add message to the existing bot group
-            lastMessageGroup = addGroupNode('others', "Bot response!"); 
+            lastMessageGroup = addGroupNode('others', `Bot Message from ${randomBotName}`); 
             createGroupNodeDetails(lastMessageGroup, randomBotImage, findBotName);
         }
 

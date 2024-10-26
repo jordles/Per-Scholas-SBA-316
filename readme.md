@@ -30,6 +30,7 @@ This is an application of a chat lobby. I made the design similar to iphone's me
 
 * I could definitely improve my code layout better, I know its messy and not DRY. 
 * Input fields and scrollbar could match the theme color. 
+* My regex is causing weird issues, but does not affect the overall application and its purpose. 
 
 ## Attributions 
 
